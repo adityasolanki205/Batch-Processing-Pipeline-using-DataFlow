@@ -1,5 +1,5 @@
 # Batch Pipeline using Apache Beam (Under Construction)
-This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit). The complete process is divided into 3 parts
+This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit). The complete process is divided into 5 parts:
 
 1. **Reading the data**
 2. **Parsing the data**
