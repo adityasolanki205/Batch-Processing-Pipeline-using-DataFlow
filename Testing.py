@@ -4,30 +4,25 @@
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 import argparse
+
+SCHEMA =  'Existing_account:STRING,Duration_month:INTEGER,Credit_history:STRING,Purpose:STRING,Credit_amount:FLOAT,Saving:STRING,Employment_duration:STRING,Installment_rate:INTEGER,Personal_status:STRING,Debtors:STRING,Residential_Duration:INTEGER,Property:STRING,Age:INTEGER,Installment_plans:STRING,Housing:STRING,Number_of_credits:INTERGER,Job:STRING,Liable_People:INTEGER,Telephone:STRING,Foreign_worker:STRING,Classification:INTEGER'
+
 class Split(beam.DoFn):
     def process(self, element):
-        Date,Open,High,Low,Close,Volume, AdjClose = element.split(',')
+        Existing_account,Duration_month,Credit_history,Purpose,Credit_amount,Saving,Employment_duration,Installment_rate,Personal_status,Debtors,Residential_Duration,Property,Age,Installment_plans,Housing,Number_of_credits,Job,Liable_People,Telephone,Foreign_worker,Classification= element.split(' ')
         return [{
             'Date': Date,
             'Open': float(Open),
             'Close': float(Close)
         }]
-class CollectOpen(beam.DoFn):
-    def process(self, element):
-        result = [(1,element['Open'])]
-        return result
 
-class CollectClose(beam.DoFn):
-    def process(self, element):
-        result = [(1,element['Close'])]
-        return result
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
     parser.add_argument(
       '--input',
       dest='input',
-      default='../data/sp500.csv',
+      default='../data/german.data',
       help='Input file to process.')
     parser.add_argument(
       '--output',
@@ -39,31 +34,7 @@ def run(argv=None, save_main_session=True):
     with beam.Pipeline(options=PipelineOptions()) as p:
         csv_lines = (p 
                      | beam.io.ReadFromText(known_args.input, skip_header_lines = 1) 
-                     | beam.ParDo(Split()))
-        open_col  = (csv_lines 
-                     | beam.ParDo(CollectOpen()) 
-                     | "Grouping Keys Open" >> beam.GroupByKey()
-                    )
-        close_col = (csv_lines 
-                     | beam.ParDo(CollectClose())
-                     | "Grouping Keys Close" >> beam.GroupByKey()
-                    )
-        '''output    = ( 
-                    ({'Open'  : open_col, 
-                      'Close' : close_col} 
-                     | beam.CoGroupByKey())
-                     | beam.io.WriteToText(known_args.output)
-                    )'''
-        '''output = ( (close_col, open_col)
-                     | beam.Flatten()
-                     | beam.io.WriteToText(known_args.output)
-                    )'''
-        '''output = (open_col 
-                      | 'Sum' >> beam.CombineValues(sum) 
-                      | beam.io.WriteToText(known_args.output)
-                     )'''
-        mean_open = ( open_col 
-                     | "Calculating mean for open" >> beam.CombineValues(beam.combiners.MeanCombineFn())
+                     | beam.Pardo(Split())
                      | beam.io.WriteToText(known_args.output)
                     )
         
