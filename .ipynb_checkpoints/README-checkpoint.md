@@ -1,11 +1,11 @@
 # Batch Pipeline using Apache Beam (Under Construction)
-This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit).
+This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit). The complete process is divided into 3 parts
 
-1. **Introduction to Apache Beam Model**
-2. **Basic Codes**
-3. **Batch Pipelines**
-4. **Streaming Pipeplines**
-5. **Conclusion**
+1. **Reading the data**
+2. **Parsing the data**
+3. **Transforming our dataset**
+4. **Deleting unwanted dataset**
+5. **Writing the data in Sink**
 
 
 ## Motivation
@@ -18,12 +18,13 @@ For the last two years, I have been part of a great learning curve wherein I hav
 - [Apache Beam](https://beam.apache.org/documentation/programming-guide/)
 - [Anaconda](https://www.anaconda.com/)
 - [Python](https://www.python.org/)
+- [Google DataFlow](https://cloud.google.com/dataflow)
 
 ## Code Example
 
 ```bash
     # clone this repo, removing the '-' to allow python imports:
-    git clone https://github.com/adityasolanki205/Intro-to-Apache-Beam.git
+    git clone https://github.com/adityasolanki205/Batch-Pipeline-using-Apache-Beam.git
     
     # Installing Virtual Environment
     pip install --upgrade virtualenv
@@ -38,7 +39,7 @@ For the last two years, I have been part of a great learning curve wherein I hav
     pip install apache-beam
 
     # Execute a Pipeline
-    python -m Testing --input ./data/sp500.csv --output ./output/result.txt
+    
     
 ```
 
