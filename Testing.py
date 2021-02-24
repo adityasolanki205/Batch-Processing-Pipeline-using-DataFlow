@@ -35,7 +35,7 @@ class Split(beam.DoFn):
         }]
 
 def filter_data(data):
-    return data['Purpose'] !=  'NULL' and Classification !=  'NULL' and 'Property' !=  'NULL' and 'Personal_status' != 'NULL' and 'Existing_account' != 'NULL' and 'Credit_amount' != 'NULL' 
+    return data['Purpose'] !=  'NULL' and 'Classification' !=  'NULL' and 'Property' !=  'NULL' and 'Personal_status' != 'NULL' and 'Existing_account' != 'NULL' and 'Credit_amount' != 'NULL' 
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
