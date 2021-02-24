@@ -35,8 +35,7 @@ class Split(beam.DoFn):
         }]
 
 def filter_data(data):
-    return data['Purpose'] !=  'NULL' and data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and
-data['Installment_plans'] != 'NULL'
+    return data['Purpose'] !=  'NULL' and data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and data['Installment_plans'] != 'NULL'
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
@@ -54,10 +53,10 @@ def run(argv=None, save_main_session=True):
     options = PipelineOptions(pipeline_args)
     with beam.Pipeline(options=PipelineOptions()) as p:
         csv_lines = (p 
-                     | beam.io.ReadFromText(known_args.input, skip_header_lines = 1) 
-                     | beam.ParDo(Split())
-                     | beam.Filter(filter_data)
-                     | beam.io.WriteToText(known_args.output)
+                     | beam.io.ReadFromText(known_args.input) 
+                     | 'Parsing Data' >> beam.ParDo(Split())
+                     | 'Filtering Data' >> beam.Filter(filter_data)
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output)
                     )
         
 if __name__ == '__main__':
