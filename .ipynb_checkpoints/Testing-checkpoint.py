@@ -34,8 +34,20 @@ class Split(beam.DoFn):
             'Classification': str(Classification)
         }]
 
-def filter_data(data):
+def Filter_Data(data):
     return data['Purpose'] !=  'NULL' and data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and data['Installment_plans'] != 'NULL'
+
+def Convert_Datatype(data):
+    data['Duration_month'] = int(data['Duration_month']) if 'Duration_month' in data else None
+    data['Credit_amount'] = float(data['Credit_amount']) if 'Credit_amount' in data else None
+    data['Installment_rate'] = int(data['Installment_rate']) if 'Installment_rate' in data else None
+    data['Residential_Duration'] = int(data['Residential_Duration']) if 'Residential_Duration' in data else None
+    data['Age'] = int(data['Age']) if 'Age' in data else None
+    data['Number_of_credits'] = int(data['Number_of_credits']) if 'Number_of_credits' in data else None
+    data['Liable_People'] = int(data['Liable_People']) if 'Liable_People' in data else None
+    data['Classification'] =  int(data['Classification']) if 'Classification' in data else None
+    
+    return data
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
@@ -55,7 +67,8 @@ def run(argv=None, save_main_session=True):
         csv_lines = (p 
                      | beam.io.ReadFromText(known_args.input) 
                      | 'Parsing Data' >> beam.ParDo(Split())
-                     | 'Filtering Data' >> beam.Filter(filter_data)
+                     | 'Filtering Data' >> beam.Filter(Filter_Data)
+                     | 'Convert Datatypes' >> beam.Map(Convert_Datatype)
                      | 'Writing output' >> beam.io.WriteToText(known_args.output)
                     )
         
