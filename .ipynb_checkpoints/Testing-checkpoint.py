@@ -5,7 +5,7 @@ import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 import argparse
 
-SCHEMA =  'Existing_account:STRING,Duration_month:INTEGER,Credit_history:STRING,Purpose:STRING,Credit_amount:FLOAT,Saving:STRING,Employment_duration:STRING,Installment_rate:INTEGER,Personal_status:STRING,Debtors:STRING,Residential_Duration:INTEGER,Property:STRING,Age:INTEGER,Installment_plans:STRING,Housing:STRING,Number_of_credits:INTERGER,Job:STRING,Liable_People:INTEGER,Telephone:STRING,Foreign_worker:STRING,Classification:INTEGER'
+SCHEMA =  'Duration_month:INTEGER,Credit_history:STRING,Credit_amount:FLOAT,Saving:STRING,Employment_duration:STRING,Installment_rate:INTEGER,Personal_status:STRING,Debtors:STRING,Residential_Duration:INTEGER,Property:STRING,Age:INTEGER,Installment_plans:STRING,Housing:STRING,Number_of_credits:INTEGER,Job:STRING,Liable_People:INTEGER,Telephone:STRING,Foreign_worker:STRING,Classification:INTEGER,Month:STRING,days:INTEGER,File_Month:STRING,Version:INTEGER'
 
 Month_Dict = {
     'A':'January',
@@ -66,6 +66,20 @@ def Convert_Datatype(data):
     return data
 
 def Data_Wrangle(data):
+    Month_Dict = {
+    'A':'January',
+    'B':'February',
+    'C':'March',
+    'D':'April',
+    'E':'May',
+    'F':'June',
+    'G':'July',
+    'H':'August',
+    'I':'September',
+    'J':'October',
+    'K':'November',
+    'L':'December'
+    }
     existing_account = list(data['Existing_account'])
     for i in range(len(existing_account)):
         month = Month_Dict[existing_account[0]]
@@ -111,7 +125,7 @@ def run(argv=None, save_main_session=True):
                      | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
                        '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
                        schema=SCHEMA,
-                       write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+                       write_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED)
                 )
         
 if __name__ == '__main__':
