@@ -39,7 +39,7 @@ For the last two years, I have been part of a great learning curve wherein I hav
 
 ```python
     # Run the Pipeline
-    python3 Testing.py --runner DataFlowRunner --project <Your Project Name> 
+    python3 batch-pipeline.py --runner DataFlowRunner --project <Your Project Name> 
     --temp_location gs://batch-pipeline-testing/Batch/Temp 
     --staging_location gs://batch-pipeline-testing/Batch/Stage 
     --input gs://batch-pipeline-testing/Batch/german.data 
@@ -297,8 +297,13 @@ Below are the steps to setup the enviroment and run the codes:
 9. **Inserting Data in Bigquery**: Final step in the Pipeline it to insert the data in Bigquery. To do this we will use WriteToBigQuery() which requires Project id and a Schema of the target table to save the data. 
 
 ```python
+    import apache_beam as beam
+    from apache_beam.options.pipeline_options import PipelineOptions
+    import argparse
+    
     SCHEMA = 
-    'Duration_month:INTEGER,
+    '
+    Duration_month:INTEGER,
     Credit_history:STRING,
     Credit_amount:FLOAT,
     Saving:STRING,
@@ -320,7 +325,8 @@ Below are the steps to setup the enviroment and run the codes:
     Month:STRING,
     days:INTEGER,
     File_Month:STRING,
-    Version:INTEGER'
+    Version:INTEGER
+    '
     ...
     def run(argv=None, save_main_session=True):
         ...
@@ -348,6 +354,32 @@ Below are the steps to setup the enviroment and run the codes:
         run()        
 ```
 
+## Tests
+To test the code we need to do the following:
+
+    1. Copy the repository in Cloud SDK using below command:
+    git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
+    
+    2. Create a Storage Bucket in asia-east1.
+    
+    3. Copy the data file in the cloud Bucket using the below commad
+    cd Batch-Processing-Pipeline-using-DataFlow/data
+    gsutil cp german.data gs://batch-pipeline-testing/batch/
+    
+    4. Create a Dataset in asia-east1 by the name GermanCredit
+    
+    5. Create a table in GermanCredit dataset by the name GermanCreditTable
+    
+    6. Run the command and see the magic happen:
+     python3 batch-pipeline.py --runner DataFlowRunner --project <Your Project Name> 
+    --temp_location gs://batch-pipeline-testing/Batch/Temp 
+    --staging_location gs://batch-pipeline-testing/Batch/Stage 
+    --input gs://batch-pipeline-testing/Batch/german.data 
+    --region asia-east1 
+    --job_name germannnalysis
+
+
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
 2. [Apache Beam](https://beam.apache.org/documentation/programming-guide/#triggers)
+3. [Building Data Processing Pipeline With Apache Beam, Dataflow & BigQuery](https://towardsdatascience.com/apache-beam-pipeline-for-cleaning-batch-data-using-cloud-dataflow-and-bigquery-f9272cd89eba)
