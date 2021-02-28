@@ -7,6 +7,21 @@ import argparse
 
 SCHEMA =  'Existing_account:STRING,Duration_month:INTEGER,Credit_history:STRING,Purpose:STRING,Credit_amount:FLOAT,Saving:STRING,Employment_duration:STRING,Installment_rate:INTEGER,Personal_status:STRING,Debtors:STRING,Residential_Duration:INTEGER,Property:STRING,Age:INTEGER,Installment_plans:STRING,Housing:STRING,Number_of_credits:INTERGER,Job:STRING,Liable_People:INTEGER,Telephone:STRING,Foreign_worker:STRING,Classification:INTEGER'
 
+Month_Dict = {
+    'A':'January',
+    'B':'February',
+    'C':'March',
+    'D':'April',
+    'E':'May',
+    'F':'June',
+    'G':'July',
+    'H':'August',
+    'I':'September',
+    'J':'October',
+    'K':'November',
+    'L':'December'
+}
+
 class Split(beam.DoFn):
     def process(self, element):
         Existing_account,  Duration_month,Credit_history,Purpose,Credit_amount,Saving,Employment_duration,Installment_rate,Personal_status,Debtors,Residential_Duration,Property,Age,Installment_plans,Housing,Number_of_credits,Job,Liable_People,Telephone,Foreign_worker,Classification = element.split(' ')
@@ -35,7 +50,7 @@ class Split(beam.DoFn):
         }]
 
 def Filter_Data(data):
-    return data['Purpose'] !=  'NULL' and data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and data['Installment_plans'] != 'NULL'
+    return data['Purpose'] !=  'NULL' and len(data['Purpose']) <= 3  and  data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and data['Installment_plans'] != 'NULL'
 
 def Convert_Datatype(data):
     data['Duration_month'] = int(data['Duration_month']) if 'Duration_month' in data else None
@@ -48,6 +63,21 @@ def Convert_Datatype(data):
     data['Classification'] =  int(data['Classification']) if 'Classification' in data else None
    
     return data
+
+def Data_Wrangle(data):
+    existing_account = list(data['Existing_account'])
+    for i in range(len(existing_account)):
+        month = Month_Dict[existing_account[0]]
+        days = int(''.join(existing_account[1:]))
+        data['Month'] = month
+        data['days'] = days
+    purpose = list(data['Purpose'])
+    for i in range(len(purpose)):
+        file_month = Month_Dict[purpose[0]]
+        version = int(''.join(purpose[1:]))
+        data['File_Month'] = file_month
+        data['Version'] = version
+    return data    
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
@@ -69,6 +99,7 @@ def run(argv=None, save_main_session=True):
                      | 'Parsing Data' >> beam.ParDo(Split())
                      | 'Filtering Data' >> beam.Filter(Filter_Data)
                      | 'Convert Datatypes' >> beam.Map(Convert_Datatype)
+                     | 'Wrangling Data' >> beam.Map(Data_Wrangle)
                      | 'Writing output' >> beam.io.WriteToText(known_args.output)
                     )
         
