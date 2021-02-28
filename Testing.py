@@ -125,7 +125,7 @@ def run(argv=None, save_main_session=True):
                      | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
                        '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
                        schema=SCHEMA,
-                       write_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED)
+                       write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
                 )
         
 if __name__ == '__main__':
