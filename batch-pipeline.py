@@ -111,7 +111,7 @@ def run(argv=None, save_main_session=True):
     with beam.Pipeline(options=PipelineOptions()) as p:
         data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-        parsed_data = (date 
+        parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
         filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data))
