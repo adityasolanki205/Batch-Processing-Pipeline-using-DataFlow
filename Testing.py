@@ -21,10 +21,11 @@ Month_Dict = {
     'K':'November',
     'L':'December'
 }
+PROJECT_ID = 'trusty-field-283517'
 
 class Split(beam.DoFn):
     def process(self, element):
-        Existing_account,  Duration_month,Credit_history,Purpose,Credit_amount,Saving,Employment_duration,Installment_rate,Personal_status,Debtors,Residential_Duration,Property,Age,Installment_plans,Housing,Number_of_credits,Job,Liable_People,Telephone,Foreign_worker,Classification = element.split(' ')
+Existing_account,Duration_month,Credit_history,Purpose,Credit_amount,Saving,Employment_duration,Installment_rate,Personal_status,Debtors,Residential_Duration,Property,Age,Installment_plans,Housing,Number_of_credits,Job,Liable_People,Telephone,Foreign_worker,Classification = element.split(' ')
         return [{
             'Existing_account': str(Existing_account),
             'Duration_month': str(Duration_month),
@@ -77,7 +78,12 @@ def Data_Wrangle(data):
         version = int(''.join(purpose[1:]))
         data['File_Month'] = file_month
         data['Version'] = version
-    return data    
+    return data
+
+def Del_Unwanted(data):
+    del data['Purpose']
+    del data['Existing_account']
+    return data
     
 def run(argv=None, save_main_session=True):
     parser = argparse.ArgumentParser()
@@ -94,14 +100,19 @@ def run(argv=None, save_main_session=True):
     known_args, pipeline_args = parser.parse_known_args(argv)
     options = PipelineOptions(pipeline_args)
     with beam.Pipeline(options=PipelineOptions()) as p:
-        csv_lines = (p 
+        data = (p 
                      | beam.io.ReadFromText(known_args.input) 
                      | 'Parsing Data' >> beam.ParDo(Split())
                      | 'Filtering Data' >> beam.Filter(Filter_Data)
                      | 'Convert Datatypes' >> beam.Map(Convert_Datatype)
                      | 'Wrangling Data' >> beam.Map(Data_Wrangle)
+                     | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted)
                      | 'Writing output' >> beam.io.WriteToText(known_args.output)
-                    )
+                     | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
+                       '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
+                       schema=SCHEMA,
+                       write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+                )
         
 if __name__ == '__main__':
     run()
