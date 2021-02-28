@@ -1,4 +1,4 @@
-# Batch Processing Pipeline using DataFlow (Under Construction)
+# Batch Processing Pipeline using DataFlow
 This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit). The complete process is divided into 5 parts:
 
 1. **Reading the data**
@@ -84,7 +84,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ``` 
 
-4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. WE will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
+4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. We will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
 
 ```python
     class Split(beam.DoFn):
@@ -139,7 +139,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split())
                      | 'Writing output' >> beam.io.WriteToText(known_args.output))
 
@@ -167,7 +167,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
             filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data)          
@@ -197,7 +197,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
             filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data))
