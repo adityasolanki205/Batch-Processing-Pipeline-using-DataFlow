@@ -1,4 +1,4 @@
-# Batch Processing Pipeline using DataFlow (Under Construction)
+# Batch Processing Pipeline using DataFlow
 This is one of the part of **Introduction to Apache Beam using Python** Repository. Here we will try to learn basics of Apache Beam to create **Batch** pipelines. We will learn step by step how to create a batch pipeline using [German Credit Risk](https://www.kaggle.com/uciml/german-credit). The complete process is divided into 5 parts:
 
 1. **Reading the data**
@@ -6,6 +6,7 @@ This is one of the part of **Introduction to Apache Beam using Python** Reposito
 3. **Filtering the data**
 4. **Performing Type Convertion**
 5. **Data wrangling**
+6. **Delete Unwanted Columns**
 6. **Inserting Data in Bigquery**
 
 
@@ -84,7 +85,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ``` 
 
-4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. WE will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
+4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. We will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
 
 ```python
     class Split(beam.DoFn):
@@ -139,7 +140,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split())
                      | 'Writing output' >> beam.io.WriteToText(known_args.output))
 
@@ -167,7 +168,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
             filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data)          
@@ -197,7 +198,7 @@ Below are the steps to setup the enviroment and run the codes:
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-            parsed_data = (date 
+            parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
             filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data))
@@ -208,6 +209,60 @@ Below are the steps to setup the enviroment and run the codes:
     if __name__ == '__main__':
         run()
 ```
+
+7. **Data wrangling**: Now we will do some data wrangling to make some more sense of the data in some columns. For Existing_account contain 3 characters. First character is an Aplhabet which signifies Month of the year and next 2 characters are numeric which signify days. So here as well we will use Map() to wrangle data. The output of this dataset is present by the name DataWrangle.
+
+```python
+    ... 
+    def Data_Wrangle(data):
+    #Here we perform data wrangling where Values in columns are converted to make more sense
+        Month_Dict = {
+        'A':'January',
+        'B':'February',
+        'C':'March',
+        'D':'April',
+        'E':'May',
+        'F':'June',
+        'G':'July',
+        'H':'August',
+        'I':'September',
+        'J':'October',
+        'K':'November',
+        'L':'December'
+        }
+        existing_account = list(data['Existing_account'])
+        for i in range(len(existing_account)):
+            month = Month_Dict[existing_account[0]]
+            days = int(''.join(existing_account[1:]))
+            data['Month'] = month
+            data['days'] = days
+        purpose = list(data['Purpose'])
+        for i in range(len(purpose)):
+            file_month = Month_Dict[purpose[0]]
+            version = int(''.join(purpose[1:]))
+            data['File_Month'] = file_month
+            data['Version'] = version
+        return data
+    ...
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (data 
+                     | 'Parsing Data' >> beam.ParDo(Split()))
+            filtered_data = (parsed_data
+                     | 'Filtering Data' >> beam.Filter(Filter_Data))
+            Converted_data = (filtered_data
+                     | 'Convert Datatypes' >> beam.Map(Convert_Datatype))
+            Wrangled_data = (Converted_data
+                     | 'Wrangling Data' >> beam.Map(Data_Wrangle)                  
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output))
+
+    if __name__ == '__main__':
+        run()
+```
+
 
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
