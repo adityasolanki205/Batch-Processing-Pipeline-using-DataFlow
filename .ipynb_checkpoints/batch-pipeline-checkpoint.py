@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 import argparse
 
 SCHEMA = 'Duration_month:INTEGER,Credit_history:STRING,Credit_amount:FLOAT,Saving:STRING,Employment_duration:STRING,Installment_rate:INTEGER,Personal_status:STRING,Debtors:STRING,Residential_Duration:INTEGER,Property:STRING,Age:INTEGER,Installment_plans:STRING,Housing:STRING,Number_of_credits:INTEGER,Job:STRING,Liable_People:INTEGER,Telephone:STRING,Foreign_worker:STRING,Classification:INTEGER,Month:STRING,days:INTEGER,File_Month:STRING,Version:INTEGER'
 
-PROJECT_ID = 'trusty-field-283517'
 
 class Split(beam.DoFn):
     #This Function Splits the Dataset into a dictionary
@@ -96,6 +96,10 @@ def run(argv=None, save_main_session=True):
       '--input',
       dest='input',
       help='Input file to process')
+    parser.add_argument(
+      '--project',
+      dest='project',
+      help='Project used for this Pipeline')
     '''parser.add_argument(
       '--output',
       dest='output',
@@ -103,10 +107,11 @@ def run(argv=None, save_main_session=True):
       help='Output file to write results to.')'''
     known_args, pipeline_args = parser.parse_known_args(argv)
     options = PipelineOptions(pipeline_args)
+    PROJECT_ID = known_args.project
     with beam.Pipeline(options=PipelineOptions()) as p:
         data = (p 
                      | beam.io.ReadFromText(known_args.input) )
-        parsed_data = (date 
+        parsed_data = (data 
                      | 'Parsing Data' >> beam.ParDo(Split()))
         filtered_data = (parsed_data
                      | 'Filtering Data' >> beam.Filter(Filter_Data))
