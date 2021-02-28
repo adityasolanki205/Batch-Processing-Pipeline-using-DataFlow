@@ -7,7 +7,7 @@ This is one of the part of **Introduction to Apache Beam using Python** Reposito
 4. **Performing Type Convertion**
 5. **Data wrangling**
 6. **Delete Unwanted Columns**
-6. **Inserting Data in Bigquery**
+7. **Inserting Data in Bigquery**
 
 
 ## Motivation
@@ -263,6 +263,90 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ```
 
+8. **Delete Unwanted Columns**: After converting certain columns to sensable data we will remove redundant columns from the dataset. Output of this is present with the file name Delete_Unwanted_Columns text file.
+
+```python
+    ...
+    def Del_Unwanted(data):
+        #Here we delete redundant columns
+        del data['Purpose']
+        del data['Existing_account']
+        return data
+    ...
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (data 
+                     | 'Parsing Data' >> beam.ParDo(Split()))
+            filtered_data = (parsed_data
+                     | 'Filtering Data' >> beam.Filter(Filter_Data))
+            Converted_data = (filtered_data
+                     | 'Convert Datatypes' >> beam.Map(Convert_Datatype))
+            Wrangled_data = (Converted_data
+                     | 'Wrangling Data' >> beam.Map(Data_Wrangle))    
+            Cleaned_data = (Wrangled_data
+                     | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted)                 
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output))
+
+    if __name__ == '__main__':
+        run()    
+```
+
+9. **Inserting Data in Bigquery**: Final step in the Pipeline it to insert the data in Bigquery. To do this we will use WriteToBigQuery() which requires Project id and a Schema of the target table to save the data. 
+
+```python
+    SCHEMA = 
+    'Duration_month:INTEGER,
+    Credit_history:STRING,
+    Credit_amount:FLOAT,
+    Saving:STRING,
+    Employment_duration:STRING,
+    Installment_rate:INTEGER,
+    Personal_status:STRING,
+    Debtors:STRING,
+    Residential_Duration:INTEGER,
+    Property:STRING,
+    Age:INTEGER,
+    Installment_plans:STRING,
+    Housing:STRING,
+    Number_of_credits:INTEGER,
+    Job:STRING,
+    Liable_People:INTEGER,
+    Telephone:STRING,
+    Foreign_worker:STRING,
+    Classification:INTEGER,
+    Month:STRING,
+    days:INTEGER,
+    File_Month:STRING,
+    Version:INTEGER'
+    ...
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (data 
+                     | 'Parsing Data' >> beam.ParDo(Split()))
+            filtered_data = (parsed_data
+                     | 'Filtering Data' >> beam.Filter(Filter_Data))
+            Converted_data = (filtered_data
+                     | 'Convert Datatypes' >> beam.Map(Convert_Datatype))
+            Wrangled_data = (Converted_data
+                     | 'Wrangling Data' >> beam.Map(Data_Wrangle))    
+            Cleaned_data = (Wrangled_data
+                     | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted)  
+            output =( Cleaned_data      
+                     | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
+                       '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
+                       schema=SCHEMA,
+                       write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
+                    )
+
+    if __name__ == '__main__':
+        run()        
+```
 
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
