@@ -80,11 +80,134 @@ Below are the steps to setup the enviroment and run the codes:
                          | beam.io.ReadFromText(known_args.input)
                          | 'Writing output' >> beam.io.WriteToText(known_args.output)
                    ) 
+    if __name__ == '__main__':
+        run()
+``` 
+
+4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. WE will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
+
+```python
+    class Split(beam.DoFn):
+        #This Function Splits the Dataset into a dictionary
+        def process(self, element): 
+            Existing_account,
+            Duration_month,
+            Credit_history,
+            Purpose,
+            Credit_amount,
+            Saving,
+            Employment_duration,
+            Installment_rate,
+            Personal_status,
+            Debtors,
+            Residential_Duration,
+            Property,
+            Age,
+            Installment_plans,
+            Housing,
+            Number_of_credits
+            Job,
+            Liable_People,
+            Telephone,
+            Foreign_worker,
+            Classification = element.split(' ')
+        return [{
+            'Existing_account': str(Existing_account),
+            'Duration_month': str(Duration_month),
+            'Credit_history': str(Credit_history),
+            'Purpose': str(Purpose),
+            'Credit_amount': str(Credit_amount),
+            'Saving': str(Saving),
+            'Employment_duration':str(Employment_duration),
+            'Installment_rate': str(Installment_rate),
+            'Personal_status': str(Personal_status),
+            'Debtors': str(Debtors),
+            'Residential_Duration': str(Residential_Duration),
+            'Property': str(Property),
+            'Age': str(Age),
+            'Installment_plans':str(Installment_plans),
+            'Housing': str(Housing),
+            'Number_of_credits': str(Number_of_credits),
+            'Job': str(Job),
+            'Liable_People': str(Liable_People),
+            'Telephone': str(Telephone),
+            'Foreign_worker': str(Foreign_worker),
+            'Classification': str(Classification)
+        }]
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (date 
+                     | 'Parsing Data' >> beam.ParDo(Split())
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output))
 
     if __name__ == '__main__':
         run()
 ``` 
 
+5. **Filtering the data**: Now we will clean the data by removing all the rows having Null values from the dataset. We will use Filter() to return only valid rows with no Null values. Output of this step is saved in the file named Filtered_data.
+
+```python
+    ...
+    def Filter_Data(data):
+    #This will remove rows the with Null values in any one of the columns
+        return data['Purpose'] !=  'NULL' 
+        and len(data['Purpose']) <= 3  
+        and data['Classification'] !=  'NULL' 
+        and data['Property'] !=  'NULL' 
+        and data['Personal_status'] != 'NULL' 
+        and data['Existing_account'] != 'NULL' 
+        and data['Credit_amount'] != 'NULL' 
+        and data['Installment_plans'] != 'NULL'
+    ...
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (date 
+                     | 'Parsing Data' >> beam.ParDo(Split()))
+            filtered_data = (parsed_data
+                     | 'Filtering Data' >> beam.Filter(Filter_Data)          
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output))
+
+    if __name__ == '__main__':
+        run()
+```
+
+6. **Performing Type Convertion**: After Filtering we will convert the datatype of numeric columns from String to Int or Float datatype. Here we will use Map() to apply the Convert_Datatype(). The output of this step is saved in Convert_datatype text file.
+
+```python
+    ... 
+    def Convert_Datatype(data):
+        #This will convert the datatype of columns from String to integers or Float values
+        data['Duration_month'] = int(data['Duration_month']) if 'Duration_month' in data else None
+        data['Credit_amount'] = float(data['Credit_amount']) if 'Credit_amount' in data else None
+        data['Installment_rate'] = int(data['Installment_rate']) if 'Installment_rate' in data else None
+        data['Residential_Duration'] = int(data['Residential_Duration']) if 'Residential_Duration' in data else None
+        data['Age'] = int(data['Age']) if 'Age' in data else None
+        data['Number_of_credits'] = int(data['Number_of_credits']) if 'Number_of_credits' in data else None
+        data['Liable_People'] = int(data['Liable_People']) if 'Liable_People' in data else None
+        data['Classification'] =  int(data['Classification']) if 'Classification' in data else None
+    ...
+    def run(argv=None, save_main_session=True):
+        ...
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                     | beam.io.ReadFromText(known_args.input) )
+            parsed_data = (date 
+                     | 'Parsing Data' >> beam.ParDo(Split()))
+            filtered_data = (parsed_data
+                     | 'Filtering Data' >> beam.Filter(Filter_Data))
+            Converted_data = (filtered_data
+                     | 'Convert Datatypes' >> beam.Map(Convert_Datatype)
+                     | 'Writing output' >> beam.io.WriteToText(known_args.output))
+
+    if __name__ == '__main__':
+        run()
+```
 
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
