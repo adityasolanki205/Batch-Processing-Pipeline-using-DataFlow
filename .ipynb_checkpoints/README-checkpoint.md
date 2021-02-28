@@ -35,6 +35,8 @@ For the last two years, I have been part of a great learning curve wherein I hav
     cd Batch-Processing-Pipeline-using-DataFlow/data
     gsutil cp german.data gs://batch-pipeline-testing/batch/
 ```
+
+```python
     # Run the Pipeline
     python3 Testing.py --runner DataFlowRunner --project <Your Project Name> 
     --temp_location gs://batch-pipeline-testing/Batch/Temp 
