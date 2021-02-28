@@ -6,7 +6,7 @@ This is one of the part of **Introduction to Apache Beam using Python** Reposito
 3. **Filtering the data**
 4. **Performing Type Convertion**
 5. **Data wrangling**
-6. **Inserting Data in [Bigquery](https://cloud.google.com/bigquery)**
+6. **Inserting Data in Bigquery**
 
 
 ## Motivation
@@ -34,9 +34,14 @@ For the last two years, I have been part of a great learning curve wherein I hav
     # Copy the Data from SDK to Cloud Storage
     cd Batch-Processing-Pipeline-using-DataFlow/data
     gsutil cp german.data gs://batch-pipeline-testing/batch/
-    
+```
     # Run the Pipeline
-    python3 Testing.py --runner DataFlowRunner --project <Your Project Name> --temp_location gs://batch-pipeline-testing/Batch/Temp --staging_location gs://batch-pipeline-testing/Batch/Stage --input gs://batch-pipeline-testing/Batch/german.data --region asia-east1 --job_name germannnalysis
+    python3 Testing.py --runner DataFlowRunner --project <Your Project Name> 
+    --temp_location gs://batch-pipeline-testing/Batch/Temp 
+    --staging_location gs://batch-pipeline-testing/Batch/Stage 
+    --input gs://batch-pipeline-testing/Batch/german.data 
+    --region asia-east1 
+    --job_name germannnalysis
 ```
 
 ## Pipeline Construction
