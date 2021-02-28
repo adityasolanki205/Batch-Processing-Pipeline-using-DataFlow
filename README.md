@@ -52,7 +52,32 @@ Below are the steps to setup the enviroment and run the codes:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
 ```
 
-3. **Reading the Data**:
+3. **Reading the Data**: Now we will go step by step to create a pipeline starting with reading the data. The data is read using **beam.io.ReadFromText**. Here we will just read the input values and save it in a file. The output is stored in text file named simpleoutput.
+
+```python
+    def run(argv=None, save_main_session=True):
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+          '--input',
+          dest='input',
+          help='Input file to process')
+        parser.add_argument(
+          '--output',
+          dest='output',
+          default='../output/result.txt',
+          help='Output file to write results to.')
+        known_args, pipeline_args = parser.parse_known_args(argv)
+        options = PipelineOptions(pipeline_args)
+        with beam.Pipeline(options=PipelineOptions()) as p:
+            data = (p 
+                         | beam.io.ReadFromText(known_args.input)
+                         | 'Writing output' >> beam.io.WriteToText(known_args.output)
+                   ) 
+
+    if __name__ == '__main__':
+        run()
+``` 
+
 
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
