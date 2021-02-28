@@ -52,7 +52,7 @@ For the last two years, I have been part of a great learning curve wherein I hav
 
 Below are the steps to setup the enviroment and run the codes:
 
-1. **Setup**: First we will have to setup free google cloud account which can be done [here](https://cloud.google.com/free).Then we need to Download the data from [German Credit Risk](https://www.kaggle.com/uciml/german-credit).
+1. **Setup**: First we will have to setup free google cloud account which can be done [here](https://cloud.google.com/free). Then we need to Download the data from [German Credit Risk](https://www.kaggle.com/uciml/german-credit).
 
 2. **Cloning the Repository to Cloud SDK**: We will have to copy the repository on Cloud SDK using below command:
 
@@ -61,7 +61,7 @@ Below are the steps to setup the enviroment and run the codes:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
 ```
 
-3. **Reading the Data**: Now we will go step by step to create a pipeline starting with reading the data. The data is read using **beam.io.ReadFromText**. Here we will just read the input values and save it in a file. The output is stored in text file named simpleoutput.
+3. **Reading the Data**: Now we will go step by step to create a pipeline starting with reading the data. The data is read using **beam.io.ReadFromText()**. Here we will just read the input values and save it in a file. The output is stored in text file named simpleoutput.
 
 ```python
     def run(argv=None, save_main_session=True):
@@ -86,7 +86,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ``` 
 
-4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. We will ParDo() to create a split function. The output of this step is present in SplitPardo text file.
+4. **Parsing the data**: After reading the input file we will split the data using split(). Data is segregated into different columns to be used in further steps. We will **ParDo()** to create a split function. The output of this step is present in SplitPardo text file.
 
 ```python
     class Split(beam.DoFn):
@@ -149,7 +149,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ``` 
 
-5. **Filtering the data**: Now we will clean the data by removing all the rows having Null values from the dataset. We will use Filter() to return only valid rows with no Null values. Output of this step is saved in the file named Filtered_data.
+5. **Filtering the data**: Now we will clean the data by removing all the rows having Null values from the dataset. We will use **Filter()** to return only valid rows with no Null values. Output of this step is saved in the file named Filtered_data.
 
 ```python
     ...
@@ -179,7 +179,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()
 ```
 
-6. **Performing Type Convertion**: After Filtering we will convert the datatype of numeric columns from String to Int or Float datatype. Here we will use Map() to apply the Convert_Datatype(). The output of this step is saved in Convert_datatype text file.
+6. **Performing Type Convertion**: After Filtering we will convert the datatype of numeric columns from String to Int or Float datatype. Here we will use **Map()** to apply the Convert_Datatype(). The output of this step is saved in Convert_datatype text file.
 
 ```python
     ... 
@@ -295,7 +295,7 @@ Below are the steps to setup the enviroment and run the codes:
         run()    
 ```
 
-9. **Inserting Data in Bigquery**: Final step in the Pipeline it to insert the data in Bigquery. To do this we will use WriteToBigQuery() which requires Project id and a Schema of the target table to save the data. 
+9. **Inserting Data in Bigquery**: Final step in the Pipeline it to insert the data in Bigquery. To do this we will use **beam.io.WriteToBigQuery()** which requires Project id and a Schema of the target table to save the data. 
 
 ```python
     import apache_beam as beam
@@ -331,6 +331,12 @@ Below are the steps to setup the enviroment and run the codes:
     ...
     def run(argv=None, save_main_session=True):
         ...
+        parser.add_argument(
+          '--project',
+          dest='project',
+          help='Project used for this Pipeline')
+        ...
+        PROJECT_ID = known_args.project
         with beam.Pipeline(options=PipelineOptions()) as p:
             data = (p 
                      | beam.io.ReadFromText(known_args.input) )
