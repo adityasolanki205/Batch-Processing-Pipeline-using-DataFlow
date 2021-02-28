@@ -45,9 +45,14 @@ Below are the steps to setup the enviroment and run the codes:
 
 1. **Setup**: First we will have to setup free google cloud account which can be done [here](https://cloud.google.com/free).Then we need to Download the data from [German Credit Risk](https://www.kaggle.com/uciml/german-credit).
 
+2. **Cloning the Repository to Cloud SDK**: We will have to copy the repository on Cloud SDK using below command:
 
-    
-- **Batch Pipelines**: After learning basics of Apache Beam, let us try to create a Batch Pipeline to run it on Google DataFlow. You can find the repository [Here](https://github.com/adityasolanki205/Batch-Pipeline-using-Apache-Beam.git)
+```bash
+    # clone this repo:
+    git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
+```
+
+3. **Reading the Data**:
 
 ## Credits
 1. Akash Nimare's [README.md](https://gist.github.com/akashnimare/7b065c12d9750578de8e705fb4771d2f#file-readme-md)
