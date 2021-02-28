@@ -22,6 +22,7 @@ For the last two years, I have been part of a great learning curve wherein I hav
 - [Python](https://www.python.org/)
 - [Google DataFlow](https://cloud.google.com/dataflow)
 - [Google Cloud Storage](https://cloud.google.com/storage)
+- [Google Bigquery](https://cloud.google.com/bigquery)
 
 ## Code Example
 
