@@ -24,28 +24,11 @@ For the last two years, I have been part of a great learning curve wherein I hav
 - [Google Cloud Storage](https://cloud.google.com/storage)
 - [Google Bigquery](https://cloud.google.com/bigquery)
 
-## Code Example
+## Cloning Repository
 
 ```bash
     # clone this repo:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
-    
-    # Installing Apache Beam on the SDK
-    sudo pip3 install apache_beam[gcp]
-    
-    # Copy the Data from SDK to Cloud Storage
-    cd Batch-Processing-Pipeline-using-DataFlow/data
-    gsutil cp german.data gs://batch-pipeline-testing/batch/
-```
-
-```python
-    # Run the Pipeline
-    python3 batch-pipeline.py --runner DataFlowRunner --project <Your Project Name> 
-    --temp_location gs://batch-pipeline-testing/Batch/Temp 
-    --staging_location gs://batch-pipeline-testing/Batch/Stage 
-    --input gs://batch-pipeline-testing/Batch/german.data 
-    --region asia-east1 
-    --job_name germannnalysis
 ```
 
 ## Pipeline Construction
