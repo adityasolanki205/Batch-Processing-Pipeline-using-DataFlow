@@ -6,7 +6,7 @@ This is one of the part of **Introduction to Apache Beam using Python** Reposito
 3. **Filtering the data**
 4. **Performing Type Convertion**
 5. **Data wrangling**
-6. **Delete Unwanted Columns**
+6. **Deleting Unwanted Columns**
 7. **Inserting Data in Bigquery**
 
 
