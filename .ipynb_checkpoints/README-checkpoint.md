@@ -371,7 +371,7 @@ To test the code we need to do the following:
     
     3. Copy the data file in the cloud Bucket using the below commad
     cd Batch-Processing-Pipeline-using-DataFlow/data
-    gsutil cp german.data gs://batch-pipeline-testing/batch/
+    gsutil cp german.data gs://batch-pipeline-testing/Batch/
     
     4. Create a Dataset in asia-east1 by the name GermanCredit
     
