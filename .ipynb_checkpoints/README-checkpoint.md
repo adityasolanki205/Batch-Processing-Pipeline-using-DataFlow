@@ -6,7 +6,7 @@ This is one of the part of **Introduction to Apache Beam using Python** Reposito
 3. **Filtering the data**
 4. **Performing Type Convertion**
 5. **Data wrangling**
-6. **Delete Unwanted Columns**
+6. **Deleting Unwanted Columns**
 7. **Inserting Data in Bigquery**
 
 
@@ -378,12 +378,7 @@ To test the code we need to do the following:
     5. Create a table in GermanCredit dataset by the name GermanCreditTable
     
     6. Run the command and see the magic happen:
-     python3 batch-pipeline.py --runner DataFlowRunner --project <Your Project Name> 
-    --temp_location gs://batch-pipeline-testing/Batch/Temp 
-    --staging_location gs://batch-pipeline-testing/Batch/Stage 
-    --input gs://batch-pipeline-testing/Batch/german.data 
-    --region asia-east1 
-    --job_name germannnalysis
+     python3 batch-pipeline.py --runner DataFlowRunner --project <Your Project Name> --temp_location gs://batch-pipeline-testing/Batch/Temp --staging_location gs://batch-pipeline-testing/Batch/Stage --input gs://batch-pipeline-testing/Batch/german.data --region asia-east1 --job_name germananalysis
 
 
 ## Credits
