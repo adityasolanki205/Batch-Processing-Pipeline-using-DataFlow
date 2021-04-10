@@ -372,6 +372,8 @@ To test the code we need to do the following:
      --input gs://batch-pipeline-testing/Batch/german.data \
      --region asia-east1 \
      --job_name germananalysis
+     
+     Note: **This Repository also include local.py to run the Apache Beam job on you local machine**
 
 
 ## Credits
