@@ -123,13 +123,6 @@ def run(argv=None, save_main_session=True):
                      | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted))
         output = ( Cleaned_data
                    | 'Saving the output' >> beam.io.WriteToText(known_args.output))
-                 
-                     
-        '''output =( Cleaned_data      
-                     | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
-                       '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
-                       schema=SCHEMA,
-                       write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)'''
         
 if __name__ == '__main__':
     run()
