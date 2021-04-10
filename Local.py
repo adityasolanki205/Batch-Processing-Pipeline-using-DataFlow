@@ -121,7 +121,7 @@ def run(argv=None, save_main_session=True):
                      | 'Wrangling Data' >> beam.Map(Data_Wrangle))
         Cleaned_data = (Wrangled_data
                      | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted))
-        output = ( Cleaned_data
+        Output = ( Cleaned_data
                    | 'Saving the output' >> beam.io.WriteToText(known_args.output))
         
 if __name__ == '__main__':
