@@ -373,7 +373,7 @@ To test the code we need to do the following:
      --region asia-east1 \
      --job_name germananalysis
      
-     Note: **This Repository also include local.py to run the Apache Beam job on you local machine**
+     Note: This Repository also include local.py to run the Apache Beam job on you local machine
 
 
 ## Credits
