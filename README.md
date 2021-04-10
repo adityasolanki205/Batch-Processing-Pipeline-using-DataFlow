@@ -374,7 +374,7 @@ To test the code we need to do the following:
      --job_name germananalysis
      
      Note: This Repository also include local.py to run the Apache Beam job on you local machine.To Run
-     locally, run the command below
+     locally, run the command below:
      
      python -m Local --input ./data/german-original.data --output ./output/testing.txt
 
