@@ -333,7 +333,7 @@ Below are the steps to setup the enviroment and run the codes:
                      | 'Wrangling Data' >> beam.Map(Data_Wrangle))    
             Cleaned_data = (Wrangled_data
                      | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted)  
-            output =( Cleaned_data      
+            Output =( Cleaned_data      
                      | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
                        '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
                        schema=SCHEMA,
