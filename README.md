@@ -352,7 +352,7 @@ To test the code we need to do the following:
     
     2. Create a Storage Bucket in asia-east1.
     
-    3. Copy the data file in the cloud Bucket using the below commad
+    3. Copy the data file in the cloud Bucket using the below command
     cd Batch-Processing-Pipeline-using-DataFlow/data
     gsutil cp german.data gs://batch-pipeline-testing/Batch/
     
