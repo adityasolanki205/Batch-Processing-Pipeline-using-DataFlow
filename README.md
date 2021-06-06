@@ -350,7 +350,7 @@ To test the code we need to do the following:
     1. Copy the repository in Cloud SDK using below command:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
     
-    2. Create a Storage Bucket in asia-east1.
+    2. Create a Storage Bucket in asia-east1 by the name batch-pipeline-testing and two sub folders Temp and Stage.
     
     3. Copy the data file in the cloud Bucket using the below command
     cd Batch-Processing-Pipeline-using-DataFlow/data
