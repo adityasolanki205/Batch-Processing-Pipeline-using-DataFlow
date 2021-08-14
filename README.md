@@ -378,10 +378,10 @@ To test the code we need to do the following:
      
      python -m Local --input ./data/german-original.data --output ./output/testing.txt
      
-    OPTIONAL Step to run this job as a Custom Template
+    *Optional Step to run this job as a Custom Template*
      
-    8. If you wish to run this Dataflow job as a Custom Template. 
-    Use the command below to create the template in GCS bucket of your choice.
+    8. If you wish to run this Dataflow job as a Custom Template, use the command below 
+    to create the template in GCS bucket of your choice.
      python3 batch-pipeline.py \
      --runner DataFlowRunner \
      --project <Your Project Name> \
