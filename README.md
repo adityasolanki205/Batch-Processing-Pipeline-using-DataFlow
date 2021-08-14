@@ -361,7 +361,7 @@ To test the code we need to do the following:
     5. Create a table in GermanCredit dataset by the name GermanCreditTable
     
     6. Install Apache Beam on the SDK using below command
-    sudo pip3 install apache_beam[gcp]
+    pip3 install apache_beam[gcp]
     
     7. Run the command and see the magic happen:
      python3 batch-pipeline.py \
