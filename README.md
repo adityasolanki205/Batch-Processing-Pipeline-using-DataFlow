@@ -354,7 +354,7 @@ To test the code we need to do the following:
     
     3. Copy the data file in the cloud Bucket using the below command
     cd Batch-Processing-Pipeline-using-DataFlow/data
-    gsutil cp german.data gs://batch-pipeline-testing/Batch/
+    gsutil cp german.data gs://batch-pipeline-testing/
     
     4. Create a Dataset in asia-east1 by the name GermanCredit
     
@@ -367,8 +367,8 @@ To test the code we need to do the following:
      python3 batch-pipeline.py \
      --runner DataFlowRunner \
      --project <Your Project Name> \
-     --temp_location gs://batch-pipeline-testing/Batch/Temp \
-     --staging_location gs://batch-pipeline-testing/Batch/Stage \
+     --temp_location gs://batch-pipeline-testing/Temp \
+     --staging_location gs://batch-pipeline-testing/Stage \
      --input gs://batch-pipeline-testing/Batch/german.data \
      --region asia-east1 \
      --job_name germananalysis
