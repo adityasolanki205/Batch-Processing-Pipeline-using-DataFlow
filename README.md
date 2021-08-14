@@ -377,6 +377,20 @@ To test the code we need to do the following:
      locally, run the command below:
      
      python -m Local --input ./data/german-original.data --output ./output/testing.txt
+     
+    OPTIONAL Step to run this job as a Custom Template
+     
+    8. If you wish to run this Dataflow job as a Custom Template. 
+    Use the command below to create the template in GCS bucket of your choice.
+     python3 batch-pipeline.py \
+     --runner DataFlowRunner \
+     --project <Your Project Name> \
+     --temp_location gs://batch-pipeline-testing/Temp \
+     --staging_location gs://batch-pipeline-testing/Stage \
+     --input gs://batch-pipeline-testing/Batch/german.data \
+     --region asia-east1 \
+     --job_name germananalysis
+     --template_location gs://batch-pipeline-testing/Template/batch-pipeline-template
 
 
 ## Credits
