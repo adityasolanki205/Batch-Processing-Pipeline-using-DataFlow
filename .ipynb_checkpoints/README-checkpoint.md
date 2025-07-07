@@ -350,25 +350,26 @@ To test the code we need to do the following:
     1. Copy the repository in Cloud SDK using below command:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
     
-    2. Create a Storage Bucket in asia-east1.
+    2. Create a Storage Bucket in asia-east1 by the name batch-pipeline-testing and two sub folders 
+    Temp and Stage.
     
-    3. Copy the data file in the cloud Bucket using the below commad
+    3. Copy the data file in the cloud Bucket using the below command
     cd Batch-Processing-Pipeline-using-DataFlow/data
-    gsutil cp german.data gs://batch-pipeline-testing/Batch/
+    gsutil cp german.data gs://batch-pipeline-testing/
     
     4. Create a Dataset in asia-east1 by the name GermanCredit
     
     5. Create a table in GermanCredit dataset by the name GermanCreditTable
     
     6. Install Apache Beam on the SDK using below command
-    sudo pip3 install apache_beam[gcp]
+    pip3 install apache_beam[gcp]
     
     7. Run the command and see the magic happen:
      python3 batch-pipeline.py \
      --runner DataFlowRunner \
      --project <Your Project Name> \
-     --temp_location gs://batch-pipeline-testing/Batch/Temp \
-     --staging_location gs://batch-pipeline-testing/Batch/Stage \
+     --temp_location gs://batch-pipeline-testing/Temp \
+     --staging_location gs://batch-pipeline-testing/Stage \
      --input gs://batch-pipeline-testing/Batch/german.data \
      --region asia-east1 \
      --job_name germananalysis
@@ -377,6 +378,20 @@ To test the code we need to do the following:
      locally, run the command below:
      
      python -m Local --input ./data/german-original.data --output ./output/testing.txt
+     
+    Optional Step to run this job as a Custom Template
+     
+    8. If you wish to run this Dataflow job as a Custom Template, use the command below 
+    to create the template in GCS bucket of your choice.
+     python3 batch-pipeline.py \
+     --runner DataFlowRunner \
+     --project <Your Project Name> \
+     --temp_location gs://batch-pipeline-testing/Temp \
+     --staging_location gs://batch-pipeline-testing/Stage \
+     --input gs://batch-pipeline-testing/Batch/german.data \
+     --region asia-east1 \
+     --job_name germananalysis \
+     --template_location gs://batch-pipeline-testing/Template/batch-pipeline-template
 
 
 ## Credits
