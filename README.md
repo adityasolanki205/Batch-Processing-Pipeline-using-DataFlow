@@ -370,7 +370,7 @@ To test the code we need to do the following:
      --project <Your Project Name> \
      --temp_location gs://batch-pipeline-testing/Temp \
      --staging_location gs://batch-pipeline-testing/Stage \
-     --input gs://batch-pipeline-testing/Batch/german.data \
+     --input gs://batch-pipeline-testing/german.data \
      --region asia-east1 \
      --job_name germananalysis
      
