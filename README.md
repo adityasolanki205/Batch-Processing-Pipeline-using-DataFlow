@@ -350,14 +350,14 @@ To test the code we need to do the following:
     1. Copy the repository in Cloud SDK using below command:
     git clone https://github.com/adityasolanki205/Batch-Processing-Pipeline-using-DataFlow.git
     
-    2. Create a Storage Bucket in asia-east1 by the name batch-pipeline-testing and two sub folders 
+    2. Create a Storage Bucket in asia-south2 by the name batch-pipeline-testing and two sub folders 
     Temp and Stage.
     
     3. Copy the data file in the cloud Bucket using the below command
     cd Batch-Processing-Pipeline-using-DataFlow/data
     gsutil cp german.data gs://batch-pipeline-testing/
     
-    4. Create a Dataset in asia-east1 by the name GermanCredit
+    4. Create a Dataset in asia-south2 by the name GermanCredit
     
     5. Create a table in GermanCredit dataset by the name GermanCreditTable
     
@@ -371,7 +371,7 @@ To test the code we need to do the following:
      --temp_location gs://batch-pipeline-testing/Temp \
      --staging_location gs://batch-pipeline-testing/Stage \
      --input gs://batch-pipeline-testing/german.data \
-     --region asia-east1 \
+     --region asia-south2 \
      --job_name germananalysis
      
      Note: This Repository also include local.py to run the Apache Beam job on you local machine.To Run
@@ -388,8 +388,8 @@ To test the code we need to do the following:
      --project <Your Project Name> \
      --temp_location gs://batch-pipeline-testing/Temp \
      --staging_location gs://batch-pipeline-testing/Stage \
-     --input gs://batch-pipeline-testing/Batch/german.data \
-     --region asia-east1 \
+     --input gs://batch-pipeline-testing/german.data \
+     --region asia-south2 \
      --job_name germananalysis \
      --template_location gs://batch-pipeline-testing/Template/batch-pipeline-template
 
