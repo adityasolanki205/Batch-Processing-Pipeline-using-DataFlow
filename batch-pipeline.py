@@ -37,23 +37,73 @@ class Split(beam.DoFn):
             'Classification': str(Classification)
         }]
 
+def normalize_for_bigquery(data):
+
+    return {
+        "Duration_month": int(data["Duration_month"]) if data.get("Duration_month") is not None else None,
+        "Credit_history": str(data["Credit_history"]) if data.get("Credit_history") is not None else None,
+        "Credit_amount": float(data["Credit_amount"]) if data.get("Credit_amount") is not None else None,
+        "Saving": str(data["Saving"]) if data.get("Saving") is not None else None,
+        "Employment_duration": str(data["Employment_duration"]) if data.get("Employment_duration") is not None else None,
+        "Installment_rate": int(data["Installment_rate"]) if data.get("Installment_rate") is not None else None,
+        "Personal_status": str(data["Personal_status"]) if data.get("Personal_status") is not None else None,
+        "Debtors": str(data["Debtors"]) if data.get("Debtors") is not None else None,
+        "Residential_Duration": int(data["Residential_Duration"]) if data.get("Residential_Duration") is not None else None,
+        "Property": str(data["Property"]) if data.get("Property") is not None else None,
+        "Age": int(data["Age"]) if data.get("Age") is not None else None,
+        "Installment_plans": str(data["Installment_plans"]) if data.get("Installment_plans") is not None else None,
+        "Housing": str(data["Housing"]) if data.get("Housing") is not None else None,
+        "Number_of_credits": int(data["Number_of_credits"]) if data.get("Number_of_credits") is not None else None,
+        "Job": str(data["Job"]) if data.get("Job") is not None else None,
+        "Liable_People": int(data["Liable_People"]) if data.get("Liable_People") is not None else None,
+        "Telephone": str(data["Telephone"]) if data.get("Telephone") is not None else None,
+        "Foreign_worker": str(data["Foreign_worker"]) if data.get("Foreign_worker") is not None else None,
+        "Classification": int(data["Classification"]) if data.get("Classification") is not None else None,
+        "Month": str(data["Month"]) if data.get("Month") is not None else None,
+        "days": int(data["days"]) if data.get("days") is not None else None,
+        "File_Month": str(data["File_Month"]) if data.get("File_Month") is not None else None,
+        "Version": int(data["Version"]) if data.get("Version") is not None else None,
+    }
+
+
 def Filter_Data(data):
     #This will remove rows the with Null values in any one of the columns
     return data['Purpose'] !=  'NULL' and len(data['Purpose']) <= 3  and  data['Classification'] !=  'NULL' and data['Property'] !=  'NULL' and data['Personal_status'] != 'NULL' and data['Existing_account'] != 'NULL' and data['Credit_amount'] != 'NULL' and data['Installment_plans'] != 'NULL'
 
-def Convert_Datatype(data):
-    #This will convert the datatype of columns from String to integers or Float values
-    data['Duration_month'] = int(data['Duration_month']) if 'Duration_month' in data else None
-    data['Credit_amount'] = float(data['Credit_amount']) if 'Credit_amount' in data else None
-    data['Installment_rate'] = int(data['Installment_rate']) if 'Installment_rate' in data else None
-    data['Residential_Duration'] = int(data['Residential_Duration']) if 'Residential_Duration' in data else None
-    data['Age'] = int(data['Age']) if 'Age' in data else None
-    data['Number_of_credits'] = int(data['Number_of_credits']) if 'Number_of_credits' in data else None
-    data['Liable_People'] = int(data['Liable_People']) if 'Liable_People' in data else None
-    data['Classification'] =  int(data['Classification']) if 'Classification' in data else None
-   
-    return data
 
+def Convert_Datatype(data):
+
+    return {
+        'Existing_account': data.get('Existing_account'),
+        'Duration_month': int(data['Duration_month'])
+            if data.get('Duration_month') not in (None, '', 'NULL') else None,
+        'Credit_history': data.get('Credit_history'),
+        'Purpose': data.get('Purpose'),
+        'Credit_amount': float(data['Credit_amount'])
+            if data.get('Credit_amount') not in (None, '', 'NULL') else None,
+        'Saving': data.get('Saving'),
+        'Employment_duration': data.get('Employment_duration'),
+        'Installment_rate': int(data['Installment_rate'])
+            if data.get('Installment_rate') not in (None, '', 'NULL') else None,
+        'Personal_status': data.get('Personal_status'),
+        'Debtors': data.get('Debtors'),
+        'Residential_Duration': int(data['Residential_Duration'])
+            if data.get('Residential_Duration') not in (None, '', 'NULL') else None,
+        'Property': data.get('Property'),
+        'Age': int(data['Age'])
+            if data.get('Age') not in (None, '', 'NULL') else None,
+        'Installment_plans': data.get('Installment_plans'),
+        'Housing': data.get('Housing'),
+        'Number_of_credits': int(data['Number_of_credits'])
+            if data.get('Number_of_credits') not in (None, '', 'NULL') else None,
+        'Job': data.get('Job'),
+        'Liable_People': int(data['Liable_People'])
+            if data.get('Liable_People') not in (None, '', 'NULL') else None,
+        'Telephone': data.get('Telephone'),
+        'Foreign_worker': data.get('Foreign_worker'),
+        'Classification': int(data['Classification'])
+            if data.get('Classification') not in (None, '', 'NULL') else None
+    }
 def Data_Wrangle(data):
     #Here we perform data wrangling where Values in columns are converted to make more sense
     Month_Dict = {
@@ -101,7 +151,7 @@ def run(argv=None, save_main_session=True):
       dest='project',
       help='Project used for this Pipeline')
     known_args, pipeline_args = parser.parse_known_args(argv)
-    options = PipelineOptions(pipeline_args)
+    option = PipelineOptions(pipeline_args)
     PROJECT_ID = known_args.project
     with beam.Pipeline(options=PipelineOptions()) as p:
         data = (p 
@@ -116,7 +166,9 @@ def run(argv=None, save_main_session=True):
                      | 'Wrangling Data' >> beam.Map(Data_Wrangle))
         Cleaned_data = (Wrangled_data
                      | 'Delete Unwanted Columns' >> beam.Map(Del_Unwanted))
-        output =( Cleaned_data      
+        Normalized_data = (Cleaned_data
+                    | "Normalize BigQuery Types" >> beam.Map(normalize_for_bigquery))
+        output =( Normalized_data      
                      | 'Writing to bigquery' >> beam.io.WriteToBigQuery(
                        '{0}:GermanCredit.GermanCreditTable'.format(PROJECT_ID),
                        schema=SCHEMA,
