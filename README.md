@@ -391,7 +391,7 @@ To test the code we need to do the following:
      --input gs://batch-pipeline-testing/german.data \
      --region asia-south2 \
      --job_name germananalysis \
-     --template_location gs://batch-pipeline-testing/Template/batch-pipeline-template
+     --template_location gs://batch-pipeline-testing/Template/batch-pipeline-template.json
 
 
 ## Credits
